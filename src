@@ -1,1 +1,94 @@
-
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMxBwf90YABInXN5uil9M+B",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/queencardddd/labalgor2/blob/main/src\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "id": "pYUYvmzKlT5m"
+      },
+      "outputs": [],
+      "source": [
+        "# Графы\n",
+        "\n",
+        "def adjacency_matrix(vertices, edges):     # Функция создания матрицы смежности\n",
+        "    n = len(vertices)                      # Определяем количество вершин\n",
+        "\n",
+        "    matrix = [[0] * n for _ in range(n)]   # Создаем квадратную матрицу n×n, заполненную нулями\n",
+        "\n",
+        "    for u, v in edges:                     # Перебираем все ребра графа\n",
+        "        matrix[u - 1][v - 1] = 1           # Устанавливаем связь между вершинами u и v\n",
+        "        matrix[v - 1][u - 1] = 1           # Так как граф неориентированный, ставим симметричную связь\n",
+        "\n",
+        "    return matrix                          # Возвращаем готовую матрицу\n",
+        "\n",
+        "\n",
+        "def incidence_matrix(vertices, edges):     # Функция создания матрицы инцидентности\n",
+        "    n = len(vertices)                      # Количество вершин\n",
+        "    m = len(edges)                         # Количество ребер\n",
+        "\n",
+        "    matrix = [[0] * m for _ in range(n)]   # Создаем матрицу n×m, заполненную нулями\n",
+        "\n",
+        "    for j, (u, v) in enumerate(edges):     # Перебираем ребра вместе с их номерами\n",
+        "        matrix[u - 1][j] = 1               # Отмечаем, что вершина u принадлежит ребру j\n",
+        "        matrix[v - 1][j] = 1               # Отмечаем, что вершина v принадлежит ребру j\n",
+        "\n",
+        "    return matrix                          # Возвращаем матрицу инцидентности\n",
+        "\n",
+        "\n",
+        "def dfs(v, graph, visited, component):     # Функция обхода графа в глубину (DFS)\n",
+        "\n",
+        "    visited.add(v)                         # Добавляем вершину v в множество посещенных\n",
+        "    component.append(v)                    # Добавляем вершину в текущую компоненту связности\n",
+        "\n",
+        "    for neighbor in graph[v]:              # Перебираем всех соседей вершины v\n",
+        "        if neighbor not in visited:        # Если сосед еще не посещен\n",
+        "            dfs(neighbor, graph, visited, component)  # Рекурсивно запускаем DFS для соседа\n",
+        "\n",
+        "\n",
+        "def connected_components(vertices, edges): # Функция поиска компонент связности\n",
+        "    graph = {v: [] for v in vertices}      # Создаем словарь: вершина -> список соседей\n",
+        "\n",
+        "    for u, v in edges:                     # Перебираем все ребра\n",
+        "        graph[u].append(v)                 # Добавляем v в список соседей u\n",
+        "        graph[v].append(u)                 # Добавляем u в список соседей v\n",
+        "\n",
+        "    visited = set()                        # Создаем пустое множество посещенных вершин\n",
+        "    components = []                        # Создаем список для хранения компонент связности\n",
+        "\n",
+        "    for v in vertices:                     # Перебираем все вершины\n",
+        "        if v not in visited:               # Если вершина еще не посещена\n",
+        "            component = []                 # Создаем новую компоненту связности\n",
+        "            dfs(v, graph, visited, component)  # Выполняем DFS\n",
+        "            components.append(component)   # Добавляем найденную компоненту в список\n",
+        "\n",
+        "    return components                      # Возвращаем список компонент связности"
+      ]
+    }
+  ]
+}
